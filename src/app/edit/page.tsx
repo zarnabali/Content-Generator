@@ -27,7 +27,7 @@ export default function CanvasEditor() {
   const [activeTab, setActiveTab] = useState('Adjust');
 
   return (
-    <div className="flex flex-col h-[calc(100vh-72px)] overflow-hidden transition-colors duration-300" style={{ background: bg, color: fg }}>
+    <div className="flex flex-col min-h-[calc(100vh-72px)] lg:h-[calc(100vh-72px)] overflow-y-auto lg:overflow-hidden transition-colors duration-300" style={{ background: bg, color: fg }}>
       
       {/* Top Toolbar */}
       <div className="h-14 shrink-0 flex items-center justify-between px-6 border-b z-20 shadow-sm" style={{ background: surface, borderColor: border }}>
@@ -53,7 +53,7 @@ export default function CanvasEditor() {
         </div>
       </div>
 
-      <main className="flex-1 w-full flex flex-col lg:flex-row overflow-hidden relative">
+      <main className="flex-1 w-full flex flex-col lg:flex-row lg:overflow-hidden relative">
         
         {/* Left Floating Tools (Desktop) & Top Bar (Mobile) */}
         <div className="lg:absolute lg:left-6 lg:top-6 lg:bottom-6 lg:w-14 w-full flex lg:flex-col items-center justify-between lg:justify-start lg:py-4 px-4 py-2 lg:px-0 lg:rounded-2xl shadow-sm lg:shadow-2xl z-20 backdrop-blur-xl border-b lg:border-b-0 lg:border" style={{ background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.8)', borderColor: border }}>
@@ -85,7 +85,7 @@ export default function CanvasEditor() {
         </div>
 
         {/* Center Canvas Area */}
-        <div className="flex-1 relative flex items-center justify-center overflow-auto cursor-crosshair min-h-[300px] lg:min-h-0">
+        <div className="w-full lg:flex-1 relative flex items-center justify-center overflow-auto cursor-crosshair min-h-[400px] lg:min-h-0 py-8 lg:py-0">
           {/* Subtle Grid Pattern Background */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] pointer-events-none" 
                style={{ backgroundImage: 'linear-gradient(to right, #888 1px, transparent 1px), linear-gradient(to bottom, #888 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
@@ -111,7 +111,7 @@ export default function CanvasEditor() {
         </div>
 
         {/* Right Properties Panel */}
-        <div className="w-full lg:w-[340px] shrink-0 flex flex-col z-20 shadow-2xl border-t lg:border-t-0 lg:border-l h-[40vh] lg:h-auto" style={{ background: surface, borderColor: border }}>
+        <div className="w-full lg:w-[340px] shrink-0 flex flex-col z-20 border-t lg:border-t-0 lg:border-l flex-1 lg:flex-none" style={{ background: surface, borderColor: border }}>
           
           {/* Tabs */}
           <div className="flex px-2 pt-2 border-b" style={{ borderColor: border }}>
