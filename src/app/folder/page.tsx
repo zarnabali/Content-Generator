@@ -32,6 +32,7 @@ export default function FolderManager() {
   const accent = "#d4896a"; // Premium Theme Accent
 
   const [activeFolder, setActiveFolder] = useState('All Files');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const getIcon = (name: string, active: boolean) => {
     switch(name) {
@@ -44,108 +45,128 @@ export default function FolderManager() {
     }
   };
 
+  const renderSidebarContent = () => (
+    <>
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
+        <div>
+          <h2 className="text-[11px] font-black uppercase tracking-widest opacity-40 mb-3 px-3">Location</h2>
+          <div className="flex flex-col gap-0.5">
+            {['All Files', 'Images', 'Videos'].map((folder) => {
+              const active = activeFolder === folder;
+              return (
+                <button
+                  key={folder}
+                  onClick={() => { setActiveFolder(folder); setMobileSidebarOpen(false); }}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-[14px] font-semibold ${active ? 'bg-[#d4896a]/10 text-[#d4896a]' : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-70 hover:opacity-100'}`}
+                >
+                  {getIcon(folder, active)}
+                  {folder}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+        
+        <div>
+          <h2 className="text-[11px] font-black uppercase tracking-widest opacity-40 mb-3 px-3">Filter</h2>
+          <div className="flex flex-col gap-0.5">
+            {['Starred', 'Trash'].map((folder) => {
+              const active = activeFolder === folder;
+              return (
+                <button
+                  key={folder}
+                  onClick={() => { setActiveFolder(folder); setMobileSidebarOpen(false); }}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-[14px] font-semibold ${active ? 'bg-[#d4896a]/10 text-[#d4896a]' : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-70 hover:opacity-100'}`}
+                >
+                  {getIcon(folder, active)}
+                  {folder}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Storage Meter at bottom */}
+      <div className="p-5 border-t" style={{ borderColor: border }}>
+        <div className="flex items-center justify-between text-xs font-bold mb-3">
+          <span className="opacity-70 flex items-center gap-2"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Storage</span>
+          <span className="text-[#d4896a]">85%</span>
+        </div>
+        <div className="w-full h-2 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
+          <div className="h-full rounded-full" style={{ width: '85%', background: accent }} />
+        </div>
+        <div className="text-[10px] opacity-50 mt-2 font-medium tracking-wide">85.4 GB of 100 GB used</div>
+      </div>
+    </>
+  );
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-72px)] transition-colors duration-300 overflow-hidden" style={{ background: bg, color: fg }}>
       
       {/* Top Breadcrumb Bar */}
-      <div className="h-14 shrink-0 flex items-center justify-between px-6 border-b z-20" style={{ background: surface, borderColor: border }}>
+      <div className="h-14 shrink-0 flex items-center justify-between px-4 sm:px-6 border-b z-20" style={{ background: surface, borderColor: border }}>
         <div className="flex items-center gap-2 text-sm font-semibold">
-          <span className="opacity-50 hover:opacity-100 cursor-pointer transition-opacity">Workspace</span>
-          <span className="opacity-30">/</span>
-          <span>{activeFolder}</span>
+          <button className="md:hidden p-1 mr-1 rounded opacity-70 hover:opacity-100" onClick={() => setMobileSidebarOpen(true)}>
+             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <span className="hidden sm:inline opacity-50 hover:opacity-100 cursor-pointer transition-opacity">Workspace</span>
+          <span className="hidden sm:inline opacity-30">/</span>
+          <span className="truncate max-w-[100px] sm:max-w-none">{activeFolder}</span>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="relative group">
+        <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-end">
+          <div className="relative group w-full max-w-[200px] sm:max-w-xs">
             <input 
               type="text" 
-              placeholder="Search files..." 
-              className="pl-10 pr-4 py-2 w-64 rounded-full text-sm outline-none transition-all focus:ring-2 focus:ring-[#d4896a]/50"
+              placeholder="Search..." 
+              className="pl-9 pr-4 py-1.5 sm:py-2 w-full rounded-full text-sm outline-none transition-all focus:ring-2 focus:ring-[#d4896a]/50"
               style={{ background: isDark ? '#27272a' : '#f4f4f5', color: fg }}
             />
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-80 transition-opacity">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-80 transition-opacity">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </span>
           </div>
-          <button className="px-5 py-2 rounded-full text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95" style={{ background: accent }}>
-            + Upload
+          <button className="px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-[13px] sm:text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95 whitespace-nowrap" style={{ background: accent }}>
+            + New
           </button>
         </div>
       </div>
 
-      <main className="flex-1 w-full flex overflow-hidden">
+      <main className="flex-1 w-full flex overflow-hidden flex-col md:flex-row relative">
         
-        {/* Left Sidebar - Premium App Style */}
-        <aside className="w-[260px] shrink-0 flex flex-col border-r shadow-sm relative" style={{ background: isDark ? '#18181b' : '#fdfdfd', borderColor: border }}>
-          
-          <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
-            <div>
-              <h2 className="text-[11px] font-black uppercase tracking-widest opacity-40 mb-3 px-3">Location</h2>
-              <div className="flex flex-col gap-0.5">
-                {['All Files', 'Images', 'Videos'].map((folder) => {
-                  const active = activeFolder === folder;
-                  return (
-                    <button
-                      key={folder}
-                      onClick={() => setActiveFolder(folder)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-[14px] font-semibold ${active ? 'bg-[#d4896a]/10 text-[#d4896a]' : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-70 hover:opacity-100'}`}
-                    >
-                      {getIcon(folder, active)}
-                      {folder}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="text-[11px] font-black uppercase tracking-widest opacity-40 mb-3 px-3">Filter</h2>
-              <div className="flex flex-col gap-0.5">
-                {['Starred', 'Trash'].map((folder) => {
-                  const active = activeFolder === folder;
-                  return (
-                    <button
-                      key={folder}
-                      onClick={() => setActiveFolder(folder)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-[14px] font-semibold ${active ? 'bg-[#d4896a]/10 text-[#d4896a]' : 'hover:bg-black/5 dark:hover:bg-white/5 opacity-70 hover:opacity-100'}`}
-                    >
-                      {getIcon(folder, active)}
-                      {folder}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Storage Meter at bottom */}
-          <div className="p-5 border-t" style={{ borderColor: border }}>
-            <div className="flex items-center justify-between text-xs font-bold mb-3">
-              <span className="opacity-70 flex items-center gap-2"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Storage</span>
-              <span className="text-[#d4896a]">85%</span>
-            </div>
-            <div className="w-full h-2 rounded-full overflow-hidden bg-black/10 dark:bg-white/10">
-              <div className="h-full rounded-full" style={{ width: '85%', background: accent }} />
-            </div>
-            <div className="text-[10px] opacity-50 mt-2 font-medium tracking-wide">85.4 GB of 100 GB used</div>
-          </div>
-
+        {/* Left Sidebar - Desktop */}
+        <aside className="hidden md:flex w-[260px] shrink-0 flex-col border-r shadow-sm relative" style={{ background: isDark ? '#18181b' : '#fdfdfd', borderColor: border }}>
+          {renderSidebarContent()}
         </aside>
+
+        {/* Mobile Sidebar Overlay */}
+        {mobileSidebarOpen && (
+          <div className="md:hidden fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)}>
+            <div 
+              className="absolute top-0 bottom-0 left-0 w-[260px] shadow-2xl flex flex-col border-r animate-in slide-in-from-left-full"
+              style={{ background: isDark ? '#18181b' : '#fdfdfd', borderColor: border }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {renderSidebarContent()}
+            </div>
+          </div>
+        )}
 
         {/* Right Area - Asset Manager */}
         <section className="flex-1 flex flex-col min-w-0 bg-transparent relative">
           
           {/* Main Content Area */}
-          <div className="flex-1 overflow-y-auto p-8 scroll-smooth pb-32">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth pb-32">
             
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-black text-[#d4896a]">{activeFolder}</h2>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest border transition-colors hover:bg-black/5 dark:hover:bg-white/5" style={{ borderColor: border }}>
-                <FilterIcon /> Filter
+            <div className="flex items-center justify-between mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-black text-[#d4896a]">{activeFolder}</h2>
+              <button className="flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs font-bold uppercase tracking-widest border transition-colors hover:bg-black/5 dark:hover:bg-white/5" style={{ borderColor: border }}>
+                <FilterIcon /> <span className="hidden sm:inline">Filter</span>
               </button>
             </div>
 
             {/* Grid View */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
               {ASSETS.filter(a => activeFolder === 'All Files' || activeFolder === 'Starred' || (activeFolder === 'Images' && a.type === 'image') || (activeFolder === 'Videos' && a.type === 'video')).map((asset) => (
                 <AssetCard key={asset.id} asset={asset} border={border} surface={surface} isDark={isDark} />
               ))}

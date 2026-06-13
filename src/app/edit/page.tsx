@@ -53,12 +53,12 @@ export default function CanvasEditor() {
         </div>
       </div>
 
-      <main className="flex-1 w-full flex overflow-hidden relative">
+      <main className="flex-1 w-full flex flex-col lg:flex-row overflow-hidden relative">
         
-        {/* Left Floating Tools */}
-        <div className="absolute left-6 top-6 bottom-6 w-14 flex flex-col items-center py-4 rounded-2xl shadow-2xl z-20 backdrop-blur-xl border" style={{ background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.8)', borderColor: border }}>
+        {/* Left Floating Tools (Desktop) & Top Bar (Mobile) */}
+        <div className="lg:absolute lg:left-6 lg:top-6 lg:bottom-6 lg:w-14 w-full flex lg:flex-col items-center justify-between lg:justify-start lg:py-4 px-4 py-2 lg:px-0 lg:rounded-2xl shadow-sm lg:shadow-2xl z-20 backdrop-blur-xl border-b lg:border-b-0 lg:border" style={{ background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.8)', borderColor: border }}>
           
-          <div className="flex flex-col gap-2 w-full px-2">
+          <div className="flex lg:flex-col gap-2 w-full lg:px-2 overflow-x-auto hide-scrollbar">
             {[
               { id: 'Cursor', Icon: CursorIcon },
               { id: 'Brush', Icon: BrushIcon },
@@ -69,7 +69,7 @@ export default function CanvasEditor() {
               <button 
                 key={tool.id}
                 onClick={() => setActiveTool(tool.id)}
-                className={`w-full aspect-square rounded-xl flex items-center justify-center transition-all duration-200 ${activeTool === tool.id ? 'bg-[#d4896a] text-white shadow-md shadow-[#d4896a]/20' : 'opacity-50 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5'}`}
+                className={`w-10 h-10 lg:w-full lg:aspect-square shrink-0 rounded-xl flex items-center justify-center transition-all duration-200 ${activeTool === tool.id ? 'bg-[#d4896a] text-white shadow-md shadow-[#d4896a]/20' : 'opacity-50 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/5'}`}
                 title={tool.id}
               >
                 <tool.Icon />
@@ -77,7 +77,7 @@ export default function CanvasEditor() {
             ))}
           </div>
 
-          <div className="mt-auto flex flex-col items-center gap-4 w-full px-2">
+          <div className="hidden lg:flex mt-auto flex-col items-center gap-4 w-full px-2">
             <div className="w-8 h-8 rounded-full shadow-inner border-2 border-white cursor-pointer" style={{ background: accent }} title="Primary Color" />
             <div className="w-8 h-8 rounded-full shadow-inner border-2 border-white cursor-pointer -mt-6 ml-4" style={{ background: '#000000' }} title="Secondary Color" />
           </div>
@@ -85,13 +85,13 @@ export default function CanvasEditor() {
         </div>
 
         {/* Center Canvas Area */}
-        <div className="flex-1 relative flex items-center justify-center overflow-auto cursor-crosshair">
+        <div className="flex-1 relative flex items-center justify-center overflow-auto cursor-crosshair min-h-[300px] lg:min-h-0">
           {/* Subtle Grid Pattern Background */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] pointer-events-none" 
                style={{ backgroundImage: 'linear-gradient(to right, #888 1px, transparent 1px), linear-gradient(to bottom, #888 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
           
           {/* Main Artboard */}
-          <div className="relative shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-[1.01] bg-white border" style={{ width: 800, height: 500, borderColor: border }}>
+          <div className="relative shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:scale-[1.01] bg-white border max-w-[90%] max-h-[90%]" style={{ width: 800, height: 500, borderColor: border }}>
             <Image 
               src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1600&h=1000&fit=crop"
               alt="Artboard"
@@ -105,13 +105,13 @@ export default function CanvasEditor() {
             )}
             {/* Mock Brush Hover */}
             {activeTool === 'Brush' && (
-              <div className="absolute top-1/2 left-1/2 w-16 h-16 -ml-8 -mt-8 border border-white/50 rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.5)] pointer-events-none mix-blend-difference" />
+              <div className="absolute top-1/2 left-1/2 w-16 h-16 -ml-8 -mt-8 border border-white/50 rounded-full shadow-[0_0_0_1px_rgba(0,0,0,0.5)] pointer-events-none mix-blend-difference hidden lg:block" />
             )}
           </div>
         </div>
 
         {/* Right Properties Panel */}
-        <div className="w-[340px] shrink-0 flex flex-col z-20 shadow-2xl border-l" style={{ background: surface, borderColor: border }}>
+        <div className="w-full lg:w-[340px] shrink-0 flex flex-col z-20 shadow-2xl border-t lg:border-t-0 lg:border-l h-[40vh] lg:h-auto" style={{ background: surface, borderColor: border }}>
           
           {/* Tabs */}
           <div className="flex px-2 pt-2 border-b" style={{ borderColor: border }}>

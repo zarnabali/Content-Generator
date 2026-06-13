@@ -56,14 +56,14 @@ export default function Home() {
             <HistoryStrip history={data.history} />
 
             {/* ── Content: Sidebar LEFT + Gallery RIGHT ── */}
-            <div className="flex flex-col lg:flex-row gap-5 w-full">
+            <div className="flex flex-col lg:flex-row gap-5 w-full mt-4 lg:mt-0">
               {/* Sidebar */}
-              <aside className="w-full lg:w-[300px] xl:w-[320px] shrink-0">
+              <aside className="w-full lg:w-[300px] xl:w-[320px] shrink-0 order-2 lg:order-1">
                 <Sidebar />
               </aside>
 
               {/* Gallery */}
-              <section className="flex-1 min-w-0" style={{ marginTop: "-76px" }}>
+              <section className="flex-1 min-w-0 order-1 lg:order-2 lg:-mt-[76px]">
                 <GalleryGrid images={data.gallery} prompt={data.prompt} />
               </section>
             </div>
